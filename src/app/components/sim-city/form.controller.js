@@ -10,27 +10,23 @@
     vm.doStuff = doStuff;
     vm.onSubmit = onSubmit;
 
-    $scope.schema = {
-      type: "object",
-      properties: {
-        name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
-        title: { type: "string", enum: ['dr','jr','sir','mrs','mr','NaN','dj'] }
+    // TODO: get URL from somewhere
+    // var schemaURL = 'http://localhost:9090/explore/simulate/matsim/0.4';
+    var schemaURL = 'dummy_matsim_0.4.json';
+    SchemaService.getSchema(schemaURL).then(
+      function(data) {
+        $scope.schema = data.schema;
+        $scope.form = data.form;
       }
-    };
+    );
 
-    $scope.form = [
-      "name",
-      "title",
-      {
-        type: "submit",
-        title: "Save"
-      }
-    ];
-
+    $scope.schema = {};
+    $scope.form = [];
     $scope.model = {};
 
     function onSubmit(form) {
       console.log('Doing validate yo!');
+      console.log($scope.model);
       // First we broadcast an event so all fields validate themselves
       $scope.$broadcast('schemaFormValidate');
 
@@ -47,7 +43,6 @@
       // $scope.$broadcast('schemaFormRedraw')
 
       // $scope.$broadcast('schemaForm.error.name','?', 'Unvalid stuff message');
-      SchemaService.getSchema();
     }
   }
 })();

@@ -39,7 +39,15 @@
         key: 'populationSampleFactor',
         $validators: [ function(value) { return (value>0 && value<5); } ]
       },
-      'fireStations',
+      {
+        key: 'fireStations',
+        type: 'template',
+        template: '<h1 ng-click="form.foo()">Yo {{form.fireStations}}!</h1>',
+        foo: function() {
+          console.log('oh noes!');
+          console.log(this);
+        }
+      },
       'fires',
       {
         type: 'submit',

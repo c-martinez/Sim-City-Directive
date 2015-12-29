@@ -5,30 +5,28 @@
     .module('simCitySimDirective')
     .controller('FormController', FormController);
 
-  function FormController($scope, SchemaService) {
+  function FormController(SchemaService) {
     var vm = this;
+
+    vm.schema = {};
+    vm.form = [];
+    vm.model = {};
+
+    // Functions the controller exposes
     vm.doStuff = doStuff;
     vm.onSubmit = onSubmit;
 
-    // TODO: get URL from somewhere
-    // var schemaURL = 'http://localhost:9090/explore/simulate/matsim/0.4';
-    var schemaURL = 'dummy_matsim_0.4.json';
-    SchemaService.getSchema(schemaURL).then(
+    // Initialize controller
+    SchemaService.getSchema(vm.schemaurl).then(
       function(data) {
-        $scope.schema = data.schema;
-        $scope.form = data.form;
+        vm.schema = data.schema;
+        vm.form = data.form;
       }
     );
 
-    $scope.schema = {};
-    $scope.form = [];
-    $scope.model = {};
-
     function onSubmit(form) {
       console.log('Doing validate yo!');
-      console.log($scope.model);
-      // First we broadcast an event so all fields validate themselves
-      $scope.$broadcast('schemaFormValidate');
+      console.log(vm.model);
 
       // Then we check if the form is valid
       if (form.$valid) {
@@ -39,10 +37,6 @@
 
     function doStuff() {
       console.log('Doing stuff...');
-      // $scope.form.pop();
-      // $scope.$broadcast('schemaFormRedraw')
-
-      // $scope.$broadcast('schemaForm.error.name','?', 'Unvalid stuff message');
     }
   }
 })();

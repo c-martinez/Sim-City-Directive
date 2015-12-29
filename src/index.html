@@ -28,17 +28,8 @@
         <p>Form goes here:</p>
         <div class="row row-centered">
           <div class="col-sm-6 col-md-4">
-            <div ng-controller="FormController as vm">
-              <form name="myForm"
-                sf-schema="schema"
-                sf-form="form"
-                sf-model="model"
-                sf-options="{ validationMessage: { 302: 'Do not forget me!' }}"
-                ng-submit="vm.onSubmit(myForm)"
-                >
-              </form>
-              <button ng-click="vm.doStuff()" class="btn btn-success">DoStuff</button>
-            </div>
+            <!-- TODO: get URL from somewhere, eg: http://localhost:9090/explore/simulate/matsim/0.4 -->
+            <sim-form schemaurl="dummy_matsim_0.4.json"></sim-form>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@
     vm.schema = {};
     vm.form = [];
     vm.model = {};
+    vm.debugText = 'xxx';
 
     // Functions the controller exposes
     vm.doStuff = doStuff;
@@ -19,6 +20,7 @@
     // Initialize controller
     SchemaService.getSchema(vm.schemaurl).then(
       function(data) {
+        vm.debugText = SchemaService.debug.text;
         vm.schema = data.schema;
         vm.form = data.form;
       }

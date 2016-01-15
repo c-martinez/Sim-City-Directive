@@ -1,4 +1,4 @@
-<div>
+<div class="col-md-6">
   <form name="myForm"
     sf-schema="vm.schema"
     sf-form="vm.form"
@@ -8,4 +8,9 @@
     >
   </form>
   <button ng-click="vm.doStuff()" class="btn btn-success">DoStuff</button>
+</div>
+<div class="col-md-6">
+<textarea rows=25 cols=60>
+{{ vm.debugText }}
+</textarea>
 </div>

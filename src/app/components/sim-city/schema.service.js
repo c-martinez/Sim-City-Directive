@@ -10,7 +10,7 @@
     var dummySchema = {
       type: 'object',
       properties: {
-        ensamble  : { type: 'string', minLength: 1, title: 'ensemble name' },
+        ensemble  : { type: 'string', minLength: 1, title: 'ensemble name' },
         simulation: { type: 'string', minLength: 1, title: 'scenario name' },
         populationSampleFactor:
                     { type: 'number', default: 1,
@@ -25,22 +25,11 @@
         },
         fires: {
           type: 'array',
-          items: { type: 'object' }
-        },
-
-        "comments": {
-          "type": "array",
-          "maxItems": 2,
-          "items": {
-            "type": "object",
-            "properties": {
-              "spam": {
-                "title": "Spam",
-                "type": "string"
-              },
-              "comment": {
-                "title": "Comment",
-                "type": "string",
+          items: {
+            type: 'object',
+            properties: {
+              location: {
+                type: 'point2d'
               }
             }
           }
@@ -50,7 +39,7 @@
 
     // TODO: form should be loaded from http://localhost:9090/explore/simulate/matsim/0.4
     var dummyForm = [
-      'ensamble',
+      'ensemble',
       'simulation',
       {
         key: 'populationSampleFactor',
@@ -67,23 +56,15 @@
           console.log(this);
         }
       },
-      { key: 'fires'},
-      {
-        "key": "comments",
-        "items": [
+      { key: 'fires',
+        items: [
           {
-            "key": "comments[].spam",
-            "type": "template",
-            template: '<b>I am template!</b>',
-            "title": "Yes I want spam."
-          },
-          {
-            "key": "comments[].comment",
-            "type": "textarea"
+            key: 'fires[].location',
+            type: 'template',
+            template: '<b>We are template!</b>'
           }
         ]
       },
-
       {
         type: 'submit',
         title: 'Save'
@@ -91,17 +72,14 @@
     ];
 
     var customTypes = {};
-    // TODO: add function to append custom types
-    customTypes['point2d'] = function(schema, form) {
-      schema['items'] = { 'type': 'object' };
-      form['type'] = 'template';
-      form['template'] = '<h1 ng-click="form.foo()">Yo {{form.fireStations}}!</h1>';
-    };
+    function addCustomTypeHandler(type, handler) {
+      // Handler should be function(schema, form) {}
+      customTypes[type] = handler;
+    }
 
-    var debug = {};
     var service = {
       getSchema: getSchema,
-      debug: debug
+      addCustomTypeHandler: addCustomTypeHandler,
     };
     return service;
 
@@ -124,9 +102,6 @@
         applyRulesForItem(item, newSchema, newForm);
       });
 
-      newSchema = dummySchema;
-      newForm   = dummyForm;
-      debug.text = JSON.stringify(newForm, '<br>', 2);
       return {
         schema: newSchema,
         form:   newForm
@@ -147,22 +122,21 @@
           if(customTypes[paramType]) {
             var customTypeFun = customTypes[paramType];
             customTypeFun(schema, form);
+          } else if(typeMappings[paramType]) {
+            schema['type'] = typeMappings[paramType];
           } else {
-            schema['type'] = typeMappings[paramType] || paramType;
+            $log.debug('SchemaService: no mapping known for type: ' + paramType);
+            schema['type'] = paramType;
           }
-
         },
         contents: function(param, schema, form) {
-          // TODO: properly implement this...
-          console.log();
-          if (param['contents'].type==='point2d') {
-            // point2d
-            schema['items'] = { 'type': 'object' };
-            form['type'] = 'template';
-            form['template'] = '<h1 ng-click="form.foo()">Yo {{form.fireStations}}!</h1>';
-          } else {
-            schema['items'] = { 'type': 'string' };
-          }
+          schema['items'] = {
+            type: 'object',
+            properties: {}
+          };
+          form['items'] = [];
+          param['contents'].name = param['contents'].name || '_unnamed';
+          applyRulesForItem(param['contents'], schema['items'], form['items']);
         },
         min_length: function(param, schema, form) {
           schema['minLength'] = Number(param['min_length']);
@@ -203,7 +177,7 @@
           var rule = rules[key];
           rule(parameter, schemaItem, formItem);
         } else {
-          $log.debug('SchemaService: no rule know for key - ' + key);
+          $log.debug('SchemaService: no rule know for key: ' + key);
         }
       }
 

@@ -6,82 +6,18 @@
     .service('SchemaService', SchemaService);
 
   function SchemaService($resource, $log) {
-    // TODO: schema should be loaded from http://localhost:9090/explore/simulate/matsim/0.4
-    var dummySchema = {
-      type: 'object',
-      properties: {
-        ensemble  : { type: 'string', minLength: 1, title: 'ensemble name' },
-        simulation: { type: 'string', minLength: 1, title: 'scenario name' },
-        populationSampleFactor:
-                    { type: 'number', default: 1,
-                    validationMessage: 'Invalid value',
-                    step: 5,
-                    description: 'percentage of the population (totalling 8.5 million) that commutes' },
-        fireStations: {
-          type: 'array',
-          minLength: 1,
-          title: 'Fire stations',
-          items: { type: 'object' }
-        },
-        fires: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              location: {
-                type: 'point2d'
-              }
-            }
-          }
-        }
-      }
-    };
-
-    // TODO: form should be loaded from http://localhost:9090/explore/simulate/matsim/0.4
-    var dummyForm = [
-      'ensemble',
-      'simulation',
-      {
-        key: 'populationSampleFactor',
-        min: '0',
-        max: '100',
-        $validators: [ function(value) { return (value>=0 && value<=100); } ]
-      },
-      {
-        key: 'fireStations',
-        type: 'template',
-        template: '<h1 ng-click="form.foo()">Yo {{form.fireStations}}!</h1>',
-        foo: function() {
-          console.log('oh noes!');
-          console.log(this);
-        }
-      },
-      { key: 'fires',
-        items: [
-          {
-            key: 'fires[].location',
-            type: 'template',
-            template: '<b>We are template!</b>'
-          }
-        ]
-      },
-      {
-        type: 'submit',
-        title: 'Save'
-      }
-    ];
-
     var customTypes = {};
-    function addCustomTypeHandler(type, handler) {
-      // Handler should be function(schema, form) {}
-      customTypes[type] = handler;
-    }
 
     var service = {
-      getSchema: getSchema,
       addCustomTypeHandler: addCustomTypeHandler,
+      getSchema: getSchema,
     };
     return service;
+
+    // Handler should be function(schema, form) {}
+    function addCustomTypeHandler(type, handler) {
+      customTypes[type] = handler;
+    }
 
     function getSchema(schemaURL) {
       var schema = $resource(schemaURL);

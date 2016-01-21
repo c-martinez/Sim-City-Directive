@@ -5,7 +5,7 @@
     .module('simCitySimDirective')
     .controller('FormController', FormController);
 
-  function FormController(SchemaService) {
+  function FormController(SchemaService, SubmitSimulationService) {
     var vm = this;
 
     vm.schema = {};
@@ -13,7 +13,6 @@
     vm.model = {};
 
     // Functions the controller exposes
-    vm.doStuff = doStuff;
     vm.onSubmit = onSubmit;
 
     // Initialize controller
@@ -32,11 +31,11 @@
       if (form.$valid) {
         console.log('All cool dude! Go submit!');
         // ... do whatever you need to do with your data.
+        SubmitSimulationService.submit(vm.schemaurl,
+          vm.model, function() {
+            console.log('Do callback stuff...');
+          });
       }
-    }
-
-    function doStuff() {
-      console.log('Doing stuff...');
     }
   }
 })();

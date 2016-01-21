@@ -51,12 +51,6 @@
         "type": "point2d"
       },
       "icon": "images/fire.png"
-    },
-    {
-      "type": "point2d",
-      "name": "DemoPoint",
-      "title": "DemoPoint",
-      "description": "Just to prove my point..."
     }
   ]
 }

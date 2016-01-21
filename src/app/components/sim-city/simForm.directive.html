@@ -1,4 +1,7 @@
 <div class="col-md-6">
+  <div class="alert alert-success"
+    ng-hide="vm.hidden" ng-class="{fade: vm.startFade}"
+  >{{ vm.message }}</div>
   <form name="myForm"
     sf-schema="vm.schema"
     sf-form="vm.form"

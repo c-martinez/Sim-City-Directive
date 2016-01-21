@@ -5,12 +5,15 @@
     .module('simCitySimDirective')
     .controller('FormController', FormController);
 
-  function FormController(SchemaService, SubmitSimulationService) {
+  function FormController($timeout, SchemaService, SubmitSimulationService) {
     var vm = this;
 
     vm.schema = {};
     vm.form = [];
     vm.model = {};
+    vm.hidden = true;
+    vm.startFade = false;
+    vm.message = '';
 
     // Functions the controller exposes
     vm.onSubmit = onSubmit;
@@ -24,18 +27,26 @@
     );
 
     function onSubmit(form) {
-      console.log('Doing validate yo!');
-      console.log(vm.model);
-
       // Then we check if the form is valid
       if (form.$valid) {
-        console.log('All cool dude! Go submit!');
-        // ... do whatever you need to do with your data.
         SubmitSimulationService.submit(vm.schemaurl,
           vm.model, function() {
-            console.log('Do callback stuff...');
+            flashMessage('Form has been submitted!');
           });
       }
+    }
+
+    function flashMessage(msg) {
+      vm.message = msg;
+      vm.hidden = false;  // Show
+      vm.startFade = false;
+
+      // After 5 seconds, fade
+      $timeout(function(){
+        vm.startFade = true;
+        // and then hide
+        $timeout(function(){ vm.hidden = true; }, 500);
+      }, 2000);
     }
   }
 })();

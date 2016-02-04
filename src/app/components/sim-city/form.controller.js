@@ -5,7 +5,7 @@
     .module('simCitySimDirective')
     .controller('FormController', FormController);
 
-  function FormController($timeout, SchemaService, SubmitSimulationService) {
+  function FormController($scope, $timeout, $log, SchemaService, SubmitSimulationService) {
     var vm = this;
 
     vm.schema = {};
@@ -19,12 +19,20 @@
     vm.onSubmit = onSubmit;
 
     // Initialize controller
-    SchemaService.getSchema(vm.schemaurl).then(
-      function(data) {
-        vm.schema = data.schema;
-        vm.form = data.form;
-      }
-    );
+
+    if($scope.$parent.widget.data.schemaurl) {
+      vm.schemaurl = $scope.$parent.widget.data.schemaurl;
+    }
+    if(vm.schemaurl) {
+      SchemaService.getSchema(vm.schemaurl).then(
+        function(data) {
+          vm.schema = data.schema;
+          vm.form = data.form;
+        }
+      );
+    } else {
+      $log.debug('SimCityDirective.FormController: no URL provided');
+    }
 
     function onSubmit(form) {
       // Then we check if the form is valid

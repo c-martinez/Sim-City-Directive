@@ -12,8 +12,6 @@
       form['type'] = 'template';
       form['template'] = '<div>Point 2D template!</div>';
     });
-
-    $log.debug('runBlock end');
   }
 
 })();

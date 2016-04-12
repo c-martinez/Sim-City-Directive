@@ -1,5 +1,8 @@
 {
   "name": "simCitySimDirective",
+  "main": [
+    "dist/app.js"
+  ],
   "version": "0.0.0",
   "dependencies": {
     "jquery": "~2.1.4",
@@ -17,6 +20,18 @@
   "devDependencies": {
     "angular-mocks": "~1.4.2"
   },
+  "ignore": [
+    "bower_components",
+    "node_modules",
+    "package.json",
+    "e2e",
+    "gulp",
+    "gulpfile.js",
+    "karma.conf.js",
+    "protractor.conf.js",
+    "README.md",
+    "src"
+  ],
   "overrides": {
     "bootstrap": {
       "main": [

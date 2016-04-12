@@ -1,0 +1,56 @@
+{
+  "command": "~/bangalore-matsim-0.4/matsim.py",
+  "parameters": [
+    {
+      "min_length": "1",
+      "type": "str",
+      "name": "ensemble",
+      "title": "ensemble name"
+    },
+    {
+      "min_length": "1",
+      "type": "str",
+      "name": "simulation",
+      "title": "scenario name"
+    },
+    {
+      "name": "populationSampleFactor",
+      "min": "0",
+      "default": "1",
+      "dtype": "float",
+      "title": "commute percentage",
+      "max": "100",
+      "type": "number",
+      "description": "percentage of the population (totalling 8.5 million) that commutes"
+    },
+    {
+      "min_length": 1,
+      "name": "fireStations",
+      "title": "Fire stations",
+      "default": "blr_firestations",
+      "type": "list",
+      "contents": {
+        "type": "point2d",
+        "properties": [
+          {
+            "type": "str",
+            "name": "name"
+          }
+        ]
+      },
+      "icon": "images/firestation.png"
+    },
+    {
+      "min_length": 1,
+      "name": "fires",
+      "title": "Fire",
+      "default": "blr_fires",
+      "max_length": 1,
+      "type": "list",
+      "contents": {
+        "type": "point2d"
+      },
+      "icon": "images/fire.png"
+    }
+  ]
+}

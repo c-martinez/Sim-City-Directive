@@ -19,8 +19,7 @@
     vm.onSubmit = onSubmit;
 
     // Initialize controller
-
-    if($scope.$parent.widget.data.schemaurl) {
+    if(_.has($scope, '$parent.widget.data.schemaurl')) {
       vm.schemaurl = $scope.$parent.widget.data.schemaurl;
     }
     if(vm.schemaurl) {

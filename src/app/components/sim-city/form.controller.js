@@ -19,9 +19,12 @@
     vm.onSubmit = onSubmit;
 
     // Initialize controller
-    if(_.has($scope, '$parent.widget.data.schemaurl')) {
+    try {
       vm.schemaurl = $scope.$parent.widget.data.schemaurl;
+    } catch(e) {
+      // Do nothing...
     }
+
     if(vm.schemaurl) {
       SchemaService.getSchema(vm.schemaurl).then(
         function(data) {

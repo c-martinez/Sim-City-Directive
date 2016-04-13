@@ -10,7 +10,7 @@
 
     var service = {
       addCustomTypeHandler: addCustomTypeHandler,
-      getSchema: getSchema,
+      getSchema: getSchema
     };
     return service;
 
@@ -96,7 +96,7 @@
         },
         max: function(param, schema, form) {
           form['max'] = param['max'];
-        },
+        }
       };
 
       if(!('name' in parameter)) {

@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  var scripts = document.getElementsByTagName("script")
-  var currentScriptPath = scripts[scripts.length-1].src;
+  // var scripts = document.getElementsByTagName("script")
+  // var currentScriptPath = scripts[scripts.length-1].src;
 
   angular
     .module('simCitySimDirective')
@@ -10,7 +10,8 @@
 
   function SimForm() {
     var directive = {
-        templateUrl: currentScriptPath.replace('directive.js', 'directive.html'),
+        // templateUrl: currentScriptPath.replace('directive.js', 'directive.html'),  // Dev code
+        templateUrl: 'app/components/sim-city/simform.directive.html',
         scope: {
             schemaurl: '@'
         },

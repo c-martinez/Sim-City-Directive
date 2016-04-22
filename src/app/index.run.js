@@ -12,6 +12,11 @@
       form['type'] = 'template';
       form['template'] = '<div>Point 2D template!</div>';
     });
+    
+    SchemaService.addCustomTypeHandler('layer', function(schema, form) {
+       form['type'] = 'template'
+       form['template'] = '<div>({{item.x}}, {{item.y}})</div>' 
+    });
   }
 
 })();

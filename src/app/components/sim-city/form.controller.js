@@ -35,8 +35,15 @@
     } else {
       $log.debug('SimCityDirective.FormController: no URL provided');
     }
+    
+    SchemaService.setFormModel(vm.model);
 
     function onSubmit(form) {
+      var onSubmitHandlers = SubmitSimulationService.getOnSubmitHandlers();
+      angular.forEach(onSubmitHandlers, function(handler) {
+        handler(vm.schema, vm.model);  
+      });
+      
       // Then we check if the form is valid
       if (form.$valid) {
         SubmitSimulationService.submit(vm.schemaurl,

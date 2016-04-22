@@ -24,19 +24,16 @@
       "description": "percentage of the population (totalling 8.5 million) that commutes"
     },
     {
-      "min_length": 1,
+      "min_length": 0,
       "name": "fireStations",
       "title": "Fire stations",
       "default": "blr_firestations",
       "type": "list",
+      "startEmpty": true,
+      "add": null,
+      "remove": null,
       "contents": {
-        "type": "point2d",
-        "properties": [
-          {
-            "type": "str",
-            "name": "name"
-          }
-        ]
+        "type": "layer"
       },
       "icon": "images/firestation.png"
     },
@@ -47,6 +44,7 @@
       "default": "blr_fires",
       "max_length": 1,
       "type": "list",
+      "startEmpty": true,
       "contents": {
         "type": "point2d"
       },

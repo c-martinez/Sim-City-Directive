@@ -7,12 +7,32 @@
 
   function SchemaService($resource, $log) {
     var customTypes = {};
+    var model = {};
 
     var service = {
       addCustomTypeHandler: addCustomTypeHandler,
+      setFormModel: setFormModel,
+      modelAddValue: modelAddValue,
       getSchema: getSchema
     };
     return service;
+    
+    function setFormModel(model) {
+        this.model = model;
+    }
+    
+    function modelAddValue(key, type, value) {
+        if (typeof(this.model[key]) === 'undefined') {
+            if (type == 'list') {
+                this.model[key] = [];
+            }
+        }
+        if (type == 'list') {
+             this.model[key].push(value);
+        } else {
+            this.model.key = value;
+        }
+    }
 
     // Handler should be function(schema, form) {}
     function addCustomTypeHandler(type, handler) {
@@ -96,6 +116,15 @@
         },
         max: function(param, schema, form) {
           form['max'] = param['max'];
+        },
+        startEmpty: function(param, schema, form) {
+            form['startEmpty'] = param['startEmpty']
+        },
+        add: function(param, schema, form) {
+            form['add'] = param['add']
+        },
+        remove: function(param, schema, form) {
+            form['remove'] = param['remove']
         }
       };
 

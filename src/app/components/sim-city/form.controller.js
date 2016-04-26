@@ -36,6 +36,7 @@
       $log.debug('SimCityDirective.FormController: no URL provided');
     }
     
+    // Add the model of this form to the schema service so it can be updated
     SchemaService.setFormModel(vm.model);
 
     function onSubmit(form) {

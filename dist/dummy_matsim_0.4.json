@@ -24,33 +24,38 @@
       "description": "percentage of the population (totalling 8.5 million) that commutes"
     },
     {
-      "min_length": 1,
-      "name": "fireStations",
+      "min_length": 0,
+      "name": "FireStations",
       "title": "Fire stations",
       "default": "blr_firestations",
-      "type": "list",
+      "type": "layer",
+      "layer": "matsim",
+      "featureId": "FireStation",
+      "startEmpty": true,
       "contents": {
-        "type": "point2d",
-        "properties": [
-          {
-            "type": "str",
-            "name": "name"
-          }
-        ]
+          "type": "point2d"
       },
-      "icon": "images/firestation.png"
+      "add": null,
+      "remove": null,
+      "icon": "images/firestation.png",
+      "description": "Please add one or more fire stations to the map"
     },
     {
       "min_length": 1,
-      "name": "fires",
+      "name": "Fires",
       "title": "Fire",
       "default": "blr_fires",
       "max_length": 1,
-      "type": "list",
+      "startEmpty": true,
+      "type": "layer",
+      "layer": "matsim",
+      "featureId": "Fire",
       "contents": {
-        "type": "point2d"
+          "type": "point2d"
       },
-      "icon": "images/fire.png"
+      "add": null,
+      "remove": null,
+      "description": "Please add exactly one (1) fire to the map"
     }
   ]
 }

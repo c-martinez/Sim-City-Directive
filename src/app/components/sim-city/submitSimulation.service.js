@@ -29,7 +29,7 @@
          { send: { method: 'GET' } });
       var submited = poster.send(parameters);
 
-      if(typeof callback === 'function') {
+      if(angular.isFunction(callback)) {
         return submited.$promise.then(callback);
       } else {
         return submited.$promise;

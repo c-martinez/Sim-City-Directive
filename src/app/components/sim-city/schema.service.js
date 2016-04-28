@@ -5,7 +5,7 @@
         .module('simCitySimDirective')
         .service('SchemaService', SchemaService);
 
-    function SchemaService($resource, $log, $filter) {
+    function SchemaService($resource, $log, $filter, $q, $timeout) {
         var customTypes = {};
         var model = {};
 
@@ -74,16 +74,16 @@
         }
 
         function parseSchema(data) {
-            var newSchema = {
-                type: 'object',
-                properties: {}
-            };
-            var newForm = [];
-
             // Transform Resource object to JSON
             data = data.toJSON();
-            data.parameters.forEach(function(item) {
-                applyRulesForItem(item, newSchema, newForm, newForm);
+            
+            var newSchema = {
+                "type": "object",
+                "properties": data.properties
+            }
+            var newForm = [];
+            data.form.forEach(function(item) {
+                applyRulesForItem(item, newSchema, newForm);
             });
 
             return {
@@ -92,100 +92,101 @@
             };
         }
 
-        function applyRulesForItem(parameter, schema, form, mainForm) {
-            var rules = {
-                name: function(param, schema, form) { },
-                type: function(param, schema, form) {
-                    var paramType = param['type'];
-                    var typeMappings = {
-                        'str': 'string',
-                        'number': 'number',
-                        'list': 'array'
-                    };
-
+        function applyRulesForItem(formItem, schema, form) {
+            var formRules = {
+                type: function(formItem, schemaItem, form) {
+                    var paramType = formItem['type'];
                     if (customTypes[paramType]) {
                         var customTypeFun = customTypes[paramType];
-                        customTypeFun(schema, form, mainForm);
-                    } else if (typeMappings[paramType]) {
-                        schema['type'] = typeMappings[paramType];
+                        customTypeFun(formItem, schemaItem, form);
                     } else {
                         $log.debug('SchemaService: no mapping known for type: ' + paramType);
                         schema['type'] = paramType;
                     }
                 },
-                contents: function(param, schema, form) {
-                    schema['items'] = {
-                        type: 'object',
-                        properties: {}
-                    };
-                    form['items'] = [];
-                    param['contents'].name = param['contents'].name || '_unnamed';
-                    applyRulesForItem(param['contents'], schema['items'], form['items'], mainForm);
-                },
-                min_length: function(param, schema, form) {
-                    schema['minLength'] = Number(param['min_length']);
-                },
-                max_length: function(param, schema, form) {
-                    schema['maxLength'] = Number(param['max_length']);
+                items: function(formItem, schemaItem, form) {
+                    var newItems = [];
+                    formItem.items.forEach(function(item){
+                       applyRulesForItem(item, schemaItem.items, newItems) 
+                    });
+                    formItem.items = newItems;
                 },
                 default: function(param, schema, form) {
                     if (param['type'] === 'number') {
                         schema['default'] = Number(param['default']);
                     }
-                },
-                title: function(param, schema, form) {
-                    schema['title'] = param['title'];
-                },
-                description: function(param, schema, form) {
-                    schema['description'] = param['description'];
-                },
-                min: function(param, schema, form) {
-                    form['min'] = param['min'];
-                },
-                max: function(param, schema, form) {
-                    form['max'] = param['max'];
-                },
-                startEmpty: function(param, schema, form) {
-                    form['startEmpty'] = param['startEmpty']
-                },
-                add: function(param, schema, form) {
-                    form['add'] = param['add']
-                },
-                remove: function(param, schema, form) {
-                    form['remove'] = param['remove']
-                },
-                layer: function(param, schema, form) {
-                    schema['layer'] = param['layer']
-                },
-                featureId: function(param, schema, form) {
-                    schema['featureId'] = param['featureId']
                 }
             };
-
-            if (!('name' in parameter)) {
-                $log.debug('No name present in parameter! Cannot process further.');
-                return;
-            }
-            var name = parameter['name'];
-
-            var schemaItem = {};
-            var formItem = { key: name };
-
-            for (var key in parameter) {
-                if (key !== 'type' && key in rules) {
-                    var rule = rules[key];
-                    rule(parameter, schemaItem, formItem, mainForm);
+            
+            var schemaRules = {
+                minItems: function(formItem, schemaItem, form) {   
+                    var key = formItem.key;
+                    var minimum = schemaItem.minItems;           
+                    formItem['ngModel'] = function(ngModel){
+                         ngModel.$validators[key] = function (value) {
+                            if (value && value.length) {
+                                return value.length >= minimum;
+                            } else {
+                                return false;
+                            }
+                        };
+                    };
+                },
+                maxItems: function(formItem, schemaItem, form) {   
+                    var key = formItem.key;
+                    var maximum = schemaItem.minItems;           
+                    formItem['ngModel'] = function(ngModel){
+                         ngModel.$validators[key] = function (value) {
+                            if (value && value.length) {
+                                return value.length <= maximum;
+                            } else {
+                                return false;
+                            }
+                        };
+                    };
+                }
+            };
+            
+            var name;
+            var schemaItem;
+            if (angular.isString(formItem)) {
+                name = formItem;
+                schemaItem = schema.properties[name];
+            } else {
+                if ('key' in formItem) {
+                    name = formItem.key;
+                    schemaItem = schema.properties[name];
                 } else {
-                    $log.debug('SchemaService: no rule know for key: ' + key);
+                    name = undefined
+                    schemaItem = undefined
+                }
+ 
+                for (var key in formItem) {
+                    if (key !== 'type' && key in formRules) {
+                        var rule = formRules[key];
+                        rule(formItem, schemaItem, form);
+                    } else {
+                        $log.debug('SchemaService: no rule know for key: ' + key);
+                    }
+                }
+                for (var key in schemaItem) {
+                    if (key !== 'type' && key in schemaRules) {
+                        var schemarule = schemaRules[key];
+                        schemarule(formItem, schemaItem, form);
+                    } else {
+                        $log.debug('SchemaService: no rule know for key: ' + key);
+                    }
+                }
+                // Perform type handlers last so they can use the other values
+                if ('type' in formItem) {
+                    var typerule = formRules['type'];
+                    typerule(formItem, schemaItem, form);
                 }
             }
-            // Perform type handlers last so they can use the other values
-            if ('type' in parameter) {
-                var rule = rules['type'];
-                rule(parameter, schemaItem, formItem, mainForm);
-            }
 
-            schema.properties[name] = schemaItem;
+            if (angular.isDefined(schemaItem)) {
+                schema.properties[name] = schemaItem;
+            }
             form.push(formItem);
         }
     }

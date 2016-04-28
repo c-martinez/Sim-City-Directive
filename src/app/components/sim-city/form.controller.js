@@ -51,7 +51,9 @@
           vm.model, function() {
             flashMessage('Form has been submitted!');
           });
-      }
+      } else {
+          flashMessage('Form invalid! It has not been submitted!');
+      } 
     }
 
     function flashMessage(msg) {

@@ -1,10 +1,12 @@
 {
-  "name": "simCitySimDirective",
-  "version": "0.0.0",
+  "name": "sim-city-sim-directive",
+  "version": "0.1.0",
   "dependencies": {},
   "scripts": {
     "test": "gulp test"
   },
+  "repository": "https://github.com/indodutch/Sim-City-Directive",
+  "license": "Apache-2.0",
   "devDependencies": {
     "estraverse": "~4.1.0",
     "gulp": "~3.9.0",

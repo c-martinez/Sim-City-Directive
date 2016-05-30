@@ -24,7 +24,7 @@
       "description": "percentage of the population (totalling 8.5 million) that commutes"
     },
     {
-      "min_length": 0,
+      "minItems": 0,
       "name": "FireStations",
       "title": "Fire stations",
       "default": "blr_firestations",
@@ -41,11 +41,11 @@
       "description": "Please add one or more fire stations to the map"
     },
     {
-      "min_length": 1,
+      "minItems": 1,
       "name": "Fires",
       "title": "Fire",
       "default": "blr_fires",
-      "max_length": 1,
+      "maxItems": 1,
       "startEmpty": true,
       "type": "layer",
       "layer": "matsim",

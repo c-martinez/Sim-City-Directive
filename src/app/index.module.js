@@ -6,6 +6,7 @@
     [
       'ngResource',
       'ui.bootstrap',
+      'ngAnimate',
       'toastr',
       'schemaForm'
     ]);

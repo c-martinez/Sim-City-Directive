@@ -5,6 +5,9 @@
     "browser": true,
     "jasmine": true
   },
+  "rules": {
+    "no-unused-vars": [1, { "vars": "all", "args": "after-used", "argsIgnorePattern": "^_" }]
+  },
   "globals": {
     "angular": true,
     "module": true,

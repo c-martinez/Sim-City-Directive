@@ -5,7 +5,7 @@
     .module('simCitySimDirective')
     .service('SubmitSimulationService', SubmitSimulationService);
 
-  function SubmitSimulationService($resource, $log) {
+  function SubmitSimulationService($resource) {
     var onSubmitHandlers = [];
 
     var service = {
@@ -27,12 +27,12 @@
     function submit(targetURL, parameters, callback) {
       var poster = $resource(targetURL, {},
          { send: { method: 'POST' } });
-      var submited = poster.send(parameters);
+      var submitted = poster.send(parameters);
 
       if(angular.isFunction(callback)) {
-        return submited.$promise.then(callback);
+        return submitted.$promise.then(callback);
       } else {
-        return submited.$promise;
+        return submitted.$promise;
       }
     }
   }

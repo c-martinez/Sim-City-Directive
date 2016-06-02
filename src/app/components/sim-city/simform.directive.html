@@ -9,5 +9,5 @@
     sf-options=""
     >
   </form>
-  <button ng-click="vm.onSubmit(myForm)" class="btn btn-success">Submit</button>
+  <button ng-click="vm.onSubmit(myForm)" class="btn btn-success" ng-disabled="myForm.$invalid">Submit</button>
 </div>

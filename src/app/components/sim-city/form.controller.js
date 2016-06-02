@@ -30,6 +30,8 @@
         function(data) {
           vm.schema = data.schema;
           vm.form = data.form;
+          
+          $scope.$broadcast('schemaFormValidate')
         }
       );
     } else {
@@ -51,9 +53,7 @@
           vm.model, function() {
             flashMessage('Form has been submitted!');
           });
-      } else {
-          flashMessage('Form invalid! It has not been submitted!');
-      } 
+      }
     }
 
     function flashMessage(msg) {

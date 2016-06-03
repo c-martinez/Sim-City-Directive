@@ -1,13 +1,50 @@
 <div>
   <div class="alert alert-success"
-    ng-hide="vm.hidden" ng-class="{fade: vm.startFade}"
+    data-ng-hide="vm.hidden" data-ng-class="{fade: vm.startFade}"
   >{{ vm.message }}</div>
-  <form name="myForm"
-    sf-schema="vm.schema"
-    sf-form="vm.form"
-    sf-model="vm.model"
-    sf-options=""
-    >
-  </form>
-  <button ng-click="vm.onSubmit(myForm)" class="btn btn-success" ng-disabled="myForm.$invalid">Submit</button>
+  <div data-ng-controller="FormController">
+    <fieldset class="schema-form-fieldset">
+    <legend>Simulation Selection</legend>
+      <form name="selectForm">
+        <label for="simulationSelect"
+              class="control-label">Simulation:</label>
+        <select id="simulationSelect"
+                name="simulationSelect"
+                class="btn btn-default form-control"
+                style="margin-bottom: 15px"
+                data-ng-model="vm.simulationSelected.simulation"
+                data-ng-change="vm.simulationChanged()"
+                data-ng-options="item as item.label for item in vm.simulationOptions track by item.value">
+        </select>
+        <label
+                for="versionSelect"
+                data-ng-hide="vm.versionHidden"
+                class="control-label">Version:</label>
+        <select id="versionSelect"
+                name="versionSelect"
+                class="btn btn-default form-control"
+                style="margin-bottom: 15px"
+                data-ng-hide="vm.versionHidden"
+                data-ng-model="vm.simulationSelected.version"
+                data-ng-change="vm.simulationVersionChanged()"
+                data-ng-options="item as item.label for item in vm.versionOptions track by item.value">
+        </select>
+    </form>
+    </fieldset>
+    <fieldset class="schema-form-fieldset">
+      <legend>Simulation Parameters</legend>
+        <form name="simulationForm"
+              data-ng-hide="vm.simulationFormHidden"
+              sf-schema="vm.schema"
+              sf-form="vm.form"
+              sf-model="vm.model"
+              sf-options=""
+              >
+        </form>
+        <button data-ng-hide="vm.simulationFormHidden"
+                data-ng-click="vm.onSubmit(simulationForm)"
+                class="btn btn-success"
+                data-ng-disabled="simulationForm.$invalid">Submit</button>
+    </fieldset>
+  </div>
 </div>

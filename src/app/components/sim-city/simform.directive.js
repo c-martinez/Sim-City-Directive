@@ -12,8 +12,9 @@
     var directive = {
         // templateUrl: currentScriptPath.replace('directive.js', 'directive.html'),  // Dev code
         templateUrl: 'app/components/sim-city/simform.directive.html',
+        restrict: 'E',
         scope: {
-            schemaurl: '@'
+           webserviceUrl: '@'
         },
         controller: 'FormController',
         controllerAs: 'vm',

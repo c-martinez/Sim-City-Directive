@@ -1,7 +1,4 @@
 <div>
-  <div class="alert alert-success"
-    ng-hide="vm.hidden" ng-class="{fade: vm.startFade}"
-  >{{ vm.message }}</div>
   <form name="myForm"
     sf-schema="vm.schema"
     sf-form="vm.form"
@@ -10,4 +7,7 @@
     >
   </form>
   <button ng-click="vm.onSubmit(myForm)" class="btn btn-success">Submit</button>
+  <div class="alert" ng-hide="vm.hidden"
+       ng-class="{fade: vm.startFade, 'alert-success': !vm.hasError, 'alert-error': vm.hasError}"
+  >{{ vm.message }}</div>
 </div>

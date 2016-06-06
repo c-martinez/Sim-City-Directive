@@ -5,72 +5,13 @@
         .module('simCitySimDirective')
         .service('SchemaService', SchemaService);
 
-    function SchemaService($resource, $log) {
-        var _this = this;
-        _this.customTypes = {};
-        _this.model = {};
-
+    function SchemaService($http, $log) {
         return {
-            addCustomTypeHandler: addCustomTypeHandler,
-            setFormModel: setFormModel,
-            modelAddValue: modelAddValue,
-            modelUpdateValue: modelUpdateValue,
-            modelDeleteValue: modelDeleteValue,
             getSchema: getSchema
         };
 
-        function setFormModel(model) {
-            _this.model = model;
-        }
-
-        function modelAddValue(key, type, value) {
-            if (typeof (_this.model[key]) === 'undefined') {
-                if (type === 'list') {
-                    _this.model[key] = [];
-                }
-            }
-            if (type === 'list') {
-                _this.model[key].push(value);
-            } else {
-                _this.model.key = value;
-            }
-        }
-
-        function modelUpdateValue(key, type, value) {
-            _updateModelValue(_this.model, key, type, value, 'update');
-        }
-
-        function modelDeleteValue(key, type, value) {
-            _updateModelValue(_this.model, key, type, value, 'delete');
-        }
-
-        function _updateModelValue(model, key, type, value, action) {
-            if (type === 'list') {
-                var index = model[key].map(function(f) { return f.id }).indexOf(value.id);
-
-                if (action === 'delete') {
-                    model[key].splice(index, 1)
-                } else if (action === 'update') {
-                    model[key][index] = value;
-                }
-            } else {
-                if (action === 'delete') {
-                    model.key = undefined
-                } else if (action === 'update') {
-                    model.key = value;
-                }
-            }
-        }
-
-        // Handler should be function(schema, form) {}
-        function addCustomTypeHandler(type, handler) {
-            _this.customTypes[type] = handler;
-        }
-
         function getSchema(schemaURL) {
-            var schema = $resource(schemaURL);
-            var request = schema.get();
-            return request.$promise.then(parseSchema);
+            return $http.get(schemaURL).then(parseSchema);
         }
 
         function parseSchema(data) {

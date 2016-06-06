@@ -36,12 +36,12 @@
         // }
 
         if (vm.webserviceUrl) {
-            SchemaService.getJson(vm.webserviceUrl).then(
+            SimulationService.simulationNames(vm.webserviceUrl).then(
                 function (data) {
                     data.simulations.forEach(function (item) {
                         vm.simulationOptions.push({
                             "label": item,
-                            "value": vm.webserviceUrl + "/" + item
+                            "value": item
                         })
                     })
                 }
@@ -51,18 +51,18 @@
         }
 
         // Add the model of this form to the schema service so it can be updated
-        SchemaService.setFormModel(vm.model);
+        //SchemaService.setFormModel(vm.model);
 
         vm.simulationChanged = function () {
-            vm.simulationUrl = vm.simulationSelected.simulation.value
-            SchemaService.getJson(vm.simulationUrl).then(
+            vm.simulationName = vm.simulationSelected.simulation.value
+            SimulationService.simulationVersions(vm.webserviceUrl, vm.simulationName).then(
                 function (data) {
                     vm.simulation = data.toJSON();
                     vm.versionHidden = false;
                     Object.keys(vm.simulation).forEach(function (key) {
                         vm.versionOptions.push({
                             "label": key,
-                            "value": vm.simulationUrl + "/" + key
+                            "value": key
                         })
                     });
                 }
@@ -70,8 +70,8 @@
         }
 
         vm.simulationVersionChanged = function () {
-            vm.simulationUrl = vm.simulationSelected.version.value
-            SchemaService.getSchema(vm.simulationUrl).then(
+            vm.simulationVersion = vm.simulationSelected.version.value
+            SchemaService.getSchema(vm.webserviceUrl, vm.simulationName, vm.simulationVersion).then(
                 function (data) {
                     vm.schema = data.schema;
                     vm.form = data.form;

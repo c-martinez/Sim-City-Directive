@@ -15,7 +15,6 @@
             modelAddValue: modelAddValue,
             modelUpdateValue: modelUpdateValue,
             modelDeleteValue: modelDeleteValue,
-            getJson: getJson,
             getSchema: getSchema
         };
 
@@ -69,14 +68,12 @@
             _this.customTypes[type] = handler;
         }
 
-        function getJson(url) {
-            var resource = $resource(url);
-            var request = resource.get();
-            return request.$promise;
+        function getSchema(webserviceUrl, model, version) {
+            return getSchemaFromURL(webserviceUrl + '/simulate/' + model + '/' + version);
         }
 
-        function getSchema(schemaURL) {
-            return getJson(schemaURL).then(parseSchema)
+        function getSchemaFromURL(schemaURL) {
+            return $http.get(schemaURL).then(parseSchema)
         }
 
         function parseSchema(data) {

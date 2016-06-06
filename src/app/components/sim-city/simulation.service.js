@@ -12,7 +12,9 @@
       startJob: startJob,
       list: viewTasks,
       get: getTask,
-      summary: overview
+      summary: overview,
+      simulationNames: simulationNames,
+      simulationVersions: simulationVersions
     };
     return service;
 
@@ -37,6 +39,19 @@
         });
     }
 
+    function simulationNames(baseUrl) {
+      return $http.get(baseUrl + '/simulate/')
+        .then(function(response) {
+          return response.data;
+        });
+    }
+
+    function simulationVersions(baseUrl, model) {
+      return $http.get(baseUrl + '/simulate/' + model)
+        .then(function(response) {
+          return Object.keys(response.data);
+        });
+    }
 
     function submitTask(baseUrl, model, version, params) {
       var url = baseUrl + '/simulate/' + model;

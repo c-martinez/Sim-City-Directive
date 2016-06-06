@@ -1,25 +1,28 @@
-(function() {
-  'use strict';
+(function () {
+    'use strict';
 
-  // var scripts = document.getElementsByTagName("script")
-  // var currentScriptPath = scripts[scripts.length-1].src;
+    // var scripts = document.getElementsByTagName("script")
+    // var currentScriptPath = scripts[scripts.length-1].src;
 
-  angular
-    .module('simCitySimDirective')
-    .directive('simForm', SimForm);
+    angular
+        .module('simCitySimDirective')
+        .directive('simForm', SimForm);
 
-  function SimForm() {
-    var directive = {
-        // templateUrl: currentScriptPath.replace('directive.js', 'directive.html'),  // Dev code
-        templateUrl: 'app/components/sim-city/simform.directive.html',
-        restrict: 'E',
-        scope: {
-           webserviceUrl: '@'
-        },
-        controller: 'FormController',
-        controllerAs: 'vm',
-        bindToController: true
-    };
-    return directive;
-  }
+    function SimForm() {
+        var directive = {
+            // templateUrl: currentScriptPath.replace('directive.js', 'directive.html'),  // Dev code
+            templateUrl: 'app/components/sim-city/simform.directive.html',
+            restrict: 'E',
+            scope: {
+                webserviceUrl: '@simWebserviceUrl',
+                formMessageHandler: '&simFormMessageHandler',
+                model: '=simModel',
+                schema: '=simSchema'
+            },
+            controller: 'FormController',
+            controllerAs: 'vm',
+            bindToController: true
+        };
+        return directive;
+    }
 })();

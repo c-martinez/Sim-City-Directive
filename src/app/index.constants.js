@@ -1,7 +1,7 @@
-(function() {
-  'use strict';
+(function () {
+    'use strict';
 
-  angular
-    .module('simCitySimDirective');
+    angular
+        .module('simCitySimDirective');
 
 })();

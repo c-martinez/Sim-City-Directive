@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -46,7 +46,9 @@
 
         function _updateModelValue(model, key, type, value, action) {
             if (type === 'list') {
-                var index = model[key].map(function(f) { return f.id }).indexOf(value.id);
+                var index = model[key].map(function (f) {
+                    return f.id
+                }).indexOf(value.id);
 
                 if (action === 'delete') {
                     model[key].splice(index, 1)
@@ -86,7 +88,7 @@
                 "properties": data.properties
             };
             var newForm = [];
-            data.form.forEach(function(item) {
+            data.form.forEach(function (item) {
                 applyRulesForItem(item, newSchema, newForm);
             });
 
@@ -98,7 +100,7 @@
 
         function applyRulesForItem(formItem, schema, form) {
             var formRules = {
-                type: function(formItem, schemaItem, form) {
+                type: function (formItem, schemaItem, form) {
                     var paramType = formItem['type'];
                     if (_this.customTypes[paramType]) {
                         var customTypeFun = _this.customTypes[paramType];
@@ -108,14 +110,14 @@
                         schema['type'] = paramType;
                     }
                 },
-                items: function(formItem, schemaItem, _form) {
+                items: function (formItem, schemaItem, _form) {
                     var newItems = [];
-                    formItem.items.forEach(function(item){
-                       applyRulesForItem(item, schemaItem.items, newItems)
+                    formItem.items.forEach(function (item) {
+                        applyRulesForItem(item, schemaItem.items, newItems)
                     });
                     formItem.items = newItems;
                 },
-                default: function(param, schema, _form) {
+                default: function (param, schema, _form) {
                     if (param['type'] === 'number') {
                         schema['default'] = Number(param['default']);
                     }
@@ -123,11 +125,11 @@
             };
 
             var schemaRules = {
-                minItems: function(formItem, schemaItem, _form) {
+                minItems: function (formItem, schemaItem, _form) {
                     var key = formItem.key;
                     var minimum = schemaItem.minItems;
-                    formItem['ngModel'] = function(ngModel){
-                         ngModel.$validators[key] = function (value) {
+                    formItem['ngModel'] = function (ngModel) {
+                        ngModel.$validators[key] = function (value) {
                             if (value && value.length) {
                                 return value.length >= minimum;
                             } else {
@@ -136,11 +138,11 @@
                         };
                     };
                 },
-                maxItems: function(formItem, schemaItem, _form) {
+                maxItems: function (formItem, schemaItem, _form) {
                     var key = formItem.key;
                     var maximum = schemaItem.minItems;
-                    formItem['ngModel'] = function(ngModel){
-                         ngModel.$validators[key] = function (value) {
+                    formItem['ngModel'] = function (ngModel) {
+                        ngModel.$validators[key] = function (value) {
                             if (value && value.length) {
                                 return value.length <= maximum;
                             } else {

@@ -1,14 +1,13 @@
-(function() {
-  'use strict';
+(function () {
+    'use strict';
 
-  angular
-    .module('simCitySimDirective')
-    .config(config);
+    angular
+        .module('simCitySimDirective')
+        .config(config);
 
-  /** @ngInject */
-  function config($logProvider) {
-    // Enable log
-    $logProvider.debugEnabled(true);
-  }
-
+    /** @ngInject */
+    function config($logProvider) {
+        // Enable log
+        $logProvider.debugEnabled(true);
+    }
 })();

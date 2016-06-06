@@ -1,10 +1,10 @@
-(function() {
-  'use strict';
+(function () {
+    'use strict';
 
-  angular
-    .module('simCitySimDirective',
-    [
-      'ui.bootstrap',
-      'schemaForm'
-    ]);
+    angular
+        .module('simCitySimDirective',
+            [
+                'ui.bootstrap',
+                'schemaForm'
+            ]);
 })();

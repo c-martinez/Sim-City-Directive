@@ -18,16 +18,16 @@
         };
         return service;
 
-        function viewTasks(baseUrl, simulation, version) {
-            return $http.get(baseUrl + '/view/simulations/' + simulation + '/' + version);
+        function viewTasks(webserviceUrl, simulation, version) {
+            return $http.get(webserviceUrl + '/view/simulations/' + simulation + '/' + version);
         }
 
-        function getTask(baseUrl, id) {
-            return $http.get(baseUrl + '/simulation/' + id);
+        function getTask(webserviceUrl, id) {
+            return $http.get(webserviceUrl + '/simulation/' + id);
         }
 
-        function startJob(baseUrl, host) {
-            return $http.post(host ? baseUrl + '/job/' + host : baseUrl + '/job')
+        function startJob(webserviceUrl, host) {
+            return $http.post(host ? webserviceUrl + '/job/' + host : webserviceUrl + '/job')
                 .then(null, function (response) {
                     if (response.status === 503) {
                         response.message = 'Already enough jobs running'
@@ -39,22 +39,22 @@
                 });
         }
 
-        function simulationNames(baseUrl) {
-            return $http.get(baseUrl + '/simulate/')
+        function simulationNames(webserviceUrl) {
+            return $http.get(webserviceUrl + '/simulate/')
                 .then(function (response) {
                     return response.data;
                 });
         }
 
-        function simulationVersions(baseUrl, model) {
-            return $http.get(baseUrl + '/simulate/' + model)
+        function simulationVersions(webserviceUrl, model) {
+            return $http.get(webserviceUrl + '/simulate/' + model)
                 .then(function (response) {
                     return Object.keys(response.data);
                 });
         }
 
-        function submitTask(baseUrl, model, version, params) {
-            var url = baseUrl + '/simulate/' + model;
+        function submitTask(webserviceUrl, model, version, params) {
+            var url = webserviceUrl + '/simulate/' + model;
             if (version) {
                 url += '/' + version;
             }
@@ -77,13 +77,13 @@
                 });
         }
 
-        function deleteTask(baseUrl, id, rev) {
-            return http('DELETE', baseUrl + '/simulation/' + id, {rev: rev});
+        function deleteTask(webserviceUrl, id, rev) {
+            return http('DELETE', webserviceUrl + '/simulation/' + id, {rev: rev});
         }
 
 
-        function overview(baseUrl) {
-            return $http.get(baseUrl + '/view/totals')
+        function overview(webserviceUrl) {
+            return $http.get(webserviceUrl + '/view/totals')
                 .then(function (response) {
                     return {
                         tasks: [

@@ -19,7 +19,7 @@
                 model: '=simModel',
                 schema: '=simSchema'
             },
-            controller: 'FormController',
+            controller: 'SimFormController',
             controllerAs: 'vm',
             bindToController: true
         };
